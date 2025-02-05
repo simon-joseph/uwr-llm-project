@@ -1,0 +1,20 @@
+.DS_Store
+*/__pycache__/*
+*.pyc
+# LaTeX
+*.aux
+*.log
+*.out
+*.fdb_latexmk
+*.synctex.gz
+*.fls
+*.bbl
+*.bcf
+*.ent
+*.run.xml
+*.blg
+*.nav
+*.toc
+*.snm
+project/src/checkpoints/*
+
