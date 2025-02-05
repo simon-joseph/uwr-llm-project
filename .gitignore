@@ -16,5 +16,6 @@
 *.nav
 *.toc
 *.snm
-project/src/checkpoints/*
+src/checkpoints/*
+
 
