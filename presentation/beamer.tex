@@ -13,6 +13,7 @@
 % \usepackage{enumitem}
 \usepackage{amssymb}
 \usepackage{makecell}
+\usepackage{hyperref}
 
 \title{Projekt: Wykorzystanie CLIP do generowania opisów zdjęć satelitarnych}
 \author{Szymon Laszczyński}
@@ -207,6 +208,22 @@
       \makecell{Many buildings and green \\trees are located in a dense\\ residential area.} & \makecell{Many green trees are\\ planted on both sides of\\ a piece of green meadow.}
     \end{tabular}
   \end{table}
+\end{frame}
+
+\begin{frame}{Repozytorium i żródła}
+  projekt: \url{https://github.com/simon-joseph/uwr-llm-project} \\
+  żródła:
+  \begin{itemize}
+    \item CLIP : \url{https://openai.com/index/clip/}
+    \item CLIPCAP : \url{https://arxiv.org/pdf/2111.09734}
+    \item CLIPCAP : \url{https://github.com/rmokady/CLIP_prefix_caption}
+  \end{itemize}
+  zbiory danych:
+  \begin{itemize}
+    \item \url{huggingface.co/datasets/CHichTala/xview}
+    \item \url{huggingface.co/datasets/blanchon/EuroSAT_RGB}
+    \item \url{huggingface.co/datasets/arampacha/rsicd}
+  \end{itemize}
 \end{frame}
 
 \end{document}
