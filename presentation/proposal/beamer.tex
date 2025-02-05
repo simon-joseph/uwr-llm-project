@@ -1,0 +1,148 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{bookmark}
+\usepackage[T1]{fontenc}
+
+\title{Projekt: Wykorzystanie CLIP do rozpoznawania obiektów na zdjęciach satelitarnych}
+\author{Szymon Laszczyński}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Czym jest CLIP?}
+\begin{frame}{Na czym polega CLIP?}
+  \begin{itemize}
+    \item CLIP (Contrastive Language-Image Pretraining): Model stworzony przez OpenAI do łączenia obrazów i tekstów w jednej przestrzeni zanurzeń.
+    \item Kluczowe cechy:
+      \begin{itemize}
+        \item Trening na dużych, różnorodnych zbiorach danych (obraz+tekst).
+        \item Uniwersalność zastosowań: od analizy obrazów po wyszukiwanie informacji.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{CLIP: Przykład 1}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{../../img/remote_cats.jpg}
+      \end{figure}
+      \begin{itemize}
+        \item a photo of a cat: 0.99
+        \item a photo of a dog: 0.01
+        \item --
+        \item a photo of a cat: 0.91
+        \item a photo of a tv remote: 0.09
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item a photo of a cat: 0.01
+        \item a photo of two tv remotes: 0.99
+        \item --
+        \item a photo of a cat: 0.00
+        \item a photo of two tv remotes: 0.08
+        \item a photo of two cats and two tv remotes: 0.92
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{CLIP: Przykład 2}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{../../img/satellite.png}
+      \end{figure}
+      \begin{itemize}
+        \item 0.05 : a photo of a car
+        \item 0.40 : a photo of a river
+        \item 0.56 : a photo of a city
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item 0.00 : a photo of a car
+        \item 0.04 : a photo of a river
+        \item 0.06 : a photo of a city
+        \item 0.89 : a photo containing a part of a city with a river, buildings, roads and some cars in the parking lots
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{CLIP: Przykład 2 : uwaga!}
+  \begin{itemize}
+    \item 0.00 : a photo of a car
+    \item 0.01 : a photo of a river
+    \item 0.01 : a photo of a city
+    \item 0.11 : a photo containing a part of a city with a river, buildings, roads and some cars in the parking lots
+    \item \textcolor{red}{0.88 : a satellite image of a seacoast with industrial buildings and ship containers}
+  \end{itemize}
+\end{frame}
+
+\section{Opis projektu}
+\begin{frame}{Opis}
+  \begin{itemize}
+    \item Cel: Wykorzystanie modelu CLIP do rozpoznawania obiektów na zdjęciach satelitarnych.
+    \item Rozszerzenie: Analiza fragmentów muzyki w celu rozpoznawania gatunku muzycznego.
+  \end{itemize}
+\end{frame}
+
+\section{Charakterystyka projektu}
+\begin{frame}{Ogólna charakterystyka}
+  \begin{itemize}
+    \item Przeliczenie zanurzeń dla polskiego LLM i encodera dla obrazów.
+    \item Dotrenowanie dla specjalistycznych danych (zdjęcia satelitarne).
+    \item Eksperymenty z użyciem modelu:
+      \begin{itemize}
+        \item Rozpoznawanie obiektów na zdjęciach satelitarnych.
+        \item Oznaczanie obszarów z obiektami.
+        \item Zliczanie obiektów.
+      \end{itemize}
+    \item Badanie możliwości przeniesienia metod na inne dziedziny (np. muzykę).
+  \end{itemize}
+\end{frame}
+
+\section{Narzędzia i dane}
+\begin{frame}{Dodatkowe narzędzia i dane}
+  \begin{itemize}
+    \item Narzędzia:
+      \begin{itemize}
+        \item huggingface
+        \item OpenAI CLIP: github.com/openai/CLIP
+        \item Narzędzia do przetwarzania danych geograficznych (np. GDAL, QGIS).
+      \end{itemize}
+    \item Dane:
+      \begin{itemize}
+        \item EuroSAT github.com/phelber/eurosat
+        \item Sentinel-2 bigearth.net
+        \item github.com/Yuan-ManX/ai-audio-datasets
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\section{Definicje sukcesu}
+\begin{frame}{Definicje sukcesu projektu}
+  \begin{itemize}
+    \item Pełen sukces:
+      \begin{itemize}
+        \item Opracowanie rozszerzenia do analizy muzyki, które działa w praktyce.
+        \item Model poprawnie generuje annotacje do zdjęć satelitarnych.
+      \end{itemize}
+    \item Sukces częściowy:
+      \begin{itemize}
+        \item Model jest w stanie rozpoznawać obiekty na zdjęciach satelitarnych.
+        \item Identyfikacja ograniczeń CLIP w specyficznych zadaniach.
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\end{document}

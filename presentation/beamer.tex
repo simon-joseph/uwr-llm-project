@@ -1,0 +1,212 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{bookmark}
+\usepackage[T1]{fontenc}
+\usepackage{caption}
+
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{tikz}
+% \usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{makecell}
+
+\title{Projekt: Wykorzystanie CLIP do generowania opisów zdjęć satelitarnych}
+\author{Szymon Laszczyński}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{CLIP (Contrastive Language-Image Pretraining)}
+  Łączenie osadzeń obrazów i tekstów w uwsponionej przestrzeni poprzez uczenie różnicowe (ang. contrastive learning). \\[1em]
+
+  \textbf{Kluczowe cechy:}
+  \begin{itemize}
+    \item Trenowany na duzych zbiorach \textbf{par obraz-tekst}.
+    \item realizuje zadania wizyjne \textbf{zero-shot} bez konieczności dostosowywania modelu.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{CLIP - uczenie różnicowe}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{../img/clip-overview-a.png}
+    \caption*{\tiny source: https://openai.com/index/clip/}
+  \end{figure}
+\end{frame}
+
+% \begin{frame}{Przykład}
+%   \begin{columns}
+%     % Left column for the image
+%     \begin{column}{0.45\textwidth}
+%       \centering
+%       \includegraphics[width=\linewidth]{../img/remote_cats.jpg} % Replace with your image file
+%     \end{column}
+
+%     % Right column for the sentences and progress bars
+%     \begin{column}{0.55\textwidth}
+%       \begin{itemize}[label={}]
+%         \item  a photo of a cat
+%           \hspace{0.1cm}
+%           \begin{tikzpicture}
+%             \draw[fill=gray!50] (0,0) rectangle (4,0.1);  % Full bar length
+%             \draw[fill=blue] (0,0) rectangle (0,0.1);    % Progress length (60%)
+%           \end{tikzpicture}
+%           \text{\small 0\%}
+%           \vspace{0.2cm}
+
+%         \item  a photo of two tv remotes
+%           \hspace{0.1cm}
+%           \begin{tikzpicture}
+%             \draw[fill=gray!50] (0,0) rectangle (4,0.1);  % Full bar length
+%             \draw[fill=blue] (0,0) rectangle (0.32,0.1);    % Progress length (60%)
+%           \end{tikzpicture}
+%           \text{\small 8\%}
+%           \vspace{0.2cm}
+
+%         \item a photo of two cats and two tv remotes
+%           \hspace{0.1cm}
+%           \begin{tikzpicture}
+%             \draw[fill=gray!50] (0,0) rectangle (4,0.1);  % Full bar length
+%             \draw[fill=blue] (0,0) rectangle (3.68,0.1);    % Progress length (60%)
+%           \end{tikzpicture}
+%           \text{\small 92\%}
+%           \vspace{0.2cm}
+
+%       \end{itemize}
+%     \end{column}
+%   \end{columns}
+% \end{frame}
+
+\begin{frame}{Cele}
+  \textbf{Sukces częściowy:}
+  \begin{itemize}
+    \item rozpoznawanie obiektów na zdjęciach satelitarnych (zbiór etykiet).
+    \item identyfikacja ograniczeń CLIP.
+  \end{itemize}
+  \textbf{Pełen sukces:}
+  \begin{itemize}
+    \item generowanie opisu do zdjęć satelitarnych (bez etykiet).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Opis na podstawie etykiet}
+  Korzystamy z CLIP by zindentyfikować najbardzie prawdopodobne etykiety ze znanego zbioru.
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{../img/clip-zero-shot-from-label.png}
+    \caption*{\tiny source: https://openai.com/index/clip/}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Wyniki - XView}
+  Testowanie na zbiorze z wieloma etykietami. Wszystkich etykiety jest 60. \\[1em]
+  Przykłady: \textit{Building, Small Car, Cargo Truck, Utility Truck, Helipad, Damaged Building, Shipping container lot, Construction Site, Facility, Vehicle Lot, Small Aircraft, Storage Tank, Shipping Container}. \\[1em]
+  Wybieramy 10 najbardziej prawdopodobnych etykiet.\\[1em]
+  \begin{itemize}
+    \item 72\% że przynajmniej jedna z etykiet zostala poprawnie zidentyfikowana.
+    \item 14\% że wszystkie etykiety zostaly poprawnie zidentyfikowane.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Wyniki - XView}
+  \begin{table}[h]
+    \centering
+    \footnotesize
+    \begin{tabular}{cc}
+      \includegraphics[width=0.35\textwidth]{../img/xview_1.png} & \includegraphics[width=0.35\textwidth]{../img/xview_2.png}  \\
+      \small Bus, Small Car, Building & \small \makecell{Small Car, Utility Truck, \\Cargo Truck, Bus, Building} \\ [1em]
+      \makecell[l]{ 30\%  Helipad \\ 14\%  Damaged Building \\ 11\%  Shipping container lot \\ 10\%  \textbf{Building} \\ 7\%   Construction Site \\ 6\%   Facility \\ 4\%   Vehicle Lot \\ 3\%   Small Aircraft } & \makecell[l]{24\%  Shipping container lot \\ 16\%  Helipad \\ 10\%  Vehicle Lot \\ 6\%   Storage Tank \\ 3\%   Shipping Container \\ 3\%   \textbf{Small Car} \\ 3\%   Small Aircraft \\ 2\%   \textbf{Cargo Truck} \\ }  \\
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Wyniki - EuroSAT}
+  Testowanie na zbiorze z jedna etykietą dla zdjecia. \\[1em]
+  Wszystkich etykiety jest 10: \textit{ Annual Crop, Forest, Herbaceous Vegetation, Highway, Industrial Buildings, Pasture, Permanent Crop, Residential Buildings, River, SeaLake}. \\[1em]
+  Wybieramy najbardziej prawdopodobną etykietę.\\[1em]
+  \begin{itemize}
+    \item 44\% dla oryginalnego zestawu etykiet.
+    \item 58\% dla ograniczonego zestawu etykiet.\\
+      (field, forest, highway, buildings, body of water)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Wyniki - EuroSAT}
+  \begin{table}[h]
+    \centering
+    \small
+    \begin{tabular}{cc}
+      \includegraphics[width=0.35\textwidth]{../img/eurosat_1.png} & \includegraphics[width=0.35\textwidth]{../img/eurosat_2.png}  \\
+      Pasture &  Highway \\ [1em]
+      34\% Pasture & \makecell{42\% Residential Buildings \\ 17\% Highway}  \\ \hline
+      75\% field & 45\% highway
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Ograniczenia CLIP}
+  \begin{itemize}
+    \item Problemy z precyzyjnym identyfikowaniem obiektów
+    \item Wrażliwość na dobór etykiet
+    \item Bias wywołany przez zbiór treningowy
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Opis bez etykiet}
+  Trenujemy prosta sieć mapującą osadzenia obrazów na prefix dla prompta gpt-2.
+  \begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth]{../img/clipcap-overview.png}
+    \caption*{\tiny source: https://arxiv.org/pdf/2111.09734}
+  \end{figure}
+  Trening przeprowadzamy na zbirze: \texttt{arampacha/rsicd}
+\end{frame}
+
+\begin{frame}{Wyniki}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{../img/satellite.png}
+  \end{figure}
+  several buildings and green trees are near a river in a seaside resort. \\[1em]
+  a church is close to a river with many green trees and a pond.
+\end{frame}
+
+\begin{frame}{Wyniki}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{../img/tree_in_a_field.png}
+  \end{figure}
+  Many green trees are in a piece of green meadow.
+\end{frame}
+
+\begin{frame}{Wyniki}
+  \begin{table}[h]
+    \centering
+    \small
+    \begin{tabular}{cc}
+      \includegraphics[width=0.35\textwidth]{../img/xview_2.png} & \includegraphics[width=0.35\textwidth]{../img/eurosat_2.png}  \\
+      XView &  EuroSAT \\ [1em]
+      \makecell{Many buildings and green \\trees are located in a dense\\ residential area.} & \makecell{Many green trees are\\ planted on both sides of\\ a piece of green meadow.}
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Wyniki}
+  \begin{table}[h]
+    \centering
+    \small
+    \begin{tabular}{cc}
+      \includegraphics[width=0.35\textwidth]{../img/xview_2.png} & \includegraphics[width=0.35\textwidth]{../img/eurosat_2.png}  \\
+      XView &  EuroSAT \\ [1em]
+      \makecell{Many buildings and green \\trees are located in a dense\\ residential area.} & \makecell{Many green trees are\\ planted on both sides of\\ a piece of green meadow.}
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\end{document}
